@@ -1,0 +1,107 @@
+﻿<html>
+<body>
+	<p>鼠标移动到文字开始滚动，鼠标离开恢复原始状态</p>
+	<p>内容长度是可变的，需要更改setLength()和用于显示文字的部分</p>
+	<p>内容长度超出显示部分需要滚动，不超出就聚众显示</p>
+
+	<div style="top:120;left:100;width:160;height:20;position:absolute;overflow:hidden;border:1px solid black;"
+		onmouseenter="setLength('我是一行字我是一行字我是一行字','focusFirTxt_0','focusSecTxt_0');run_marquee('focusFirTxt_0','focusSecTxt_0');"
+		onmouseleave="stopMarquee();resetMarquee('focusFirTxt_0','focusSecTxt_0');">
+		<div id="focusFirTxt_0" style="top:0;left:0;width:160;height:20;position:absolute;text-align:center;font-size:20;color:#6E6277;font-family:黑体;">
+			我是一行字我是一行字我是一行字
+		</div>
+		<div id="focusSecTxt_0" style="top:0;left:160;width:160px;height:20;position:absolute;text-align:center;font-size:20;color:#6E6277;font-family:黑体;">	
+		我是一行字我是一行字我是一行字
+		</div>
+	</div>
+	
+	<div style="top:120;left:300;width:160;height:20;position:absolute;overflow:hidden;border:1px solid black;"
+		onmouseenter="setLength('我是一行字','focusFirTxt_0','focusSecTxt_0');run_marquee('focusFirTxt_0','focusSecTxt_0');"
+		onmouseleave="stopMarquee();resetMarquee('focusFirTxt_0','focusSecTxt_0');">
+		<div id="focusFirTxt_0" style="top:0;left:0;width:160;height:20;position:absolute;text-align:center;font-size:20;color:#6E6277;font-family:黑体;">
+			我是一行字
+		</div>
+		<div id="focusSecTxt_0" style="top:0;left:160;width:160px;height:20;position:absolute;text-align:center;font-size:20;color:#6E6277;font-family:黑体;">	
+		我是一行字
+		</div>
+	</div>
+</body>
+</html>
+
+<script type="text/javaScript">
+	var t;
+	
+	//选择器
+	function $(id) {
+		return "string" == typeof id ? document.getElementById(id) : id;
+	}
+	
+	//跑马灯效果
+	function marquee(id, id_sec) {
+		var left = $(id).style.left;
+		left = left.substring(0, left.length - 2);
+		var left_sec = $(id_sec).style.left;
+		left_sec = left_sec.substring(0, left_sec.length - 2);
+		var width = $(id).style.width;
+		width = width.substring(0, width.length - 2);
+		var width_sec = $(id_sec).style.width;
+		width_sec = width.substring(0, width_sec.length - 2);
+		
+		var temp;
+		var temp_sec;
+		
+		var result1 = parseInt(width) + parseInt(left) - 120;
+		var result2 = parseInt(width) + parseInt(left);
+		if(result2 > 0) {
+			temp = left - 1;
+		}
+		if(result1 <= 0) {
+			temp_sec = left_sec - 1;
+		}
+		if(left_sec == 0) {
+			temp = 0;
+			temp_sec = 160;
+		}
+		$(id).style.left=temp;
+		$(id_sec).style.left=temp_sec;
+	}
+	function run_marquee(id, id_sec) {
+		var width = $(id).style.width;
+		width = width.substring(0, width.length - 2);
+		if(width > 160) {
+			t = window.setInterval(function() {
+				marquee(id, id_sec);
+			}, 10);
+		}
+	}
+	function resetMarquee(id, id_sec) {
+		$(id).style.left=0;
+		$(id_sec).style.left=160;
+	}
+	function stopMarquee() {
+		clearInterval(t);
+	}
+	
+	//计算文字区域长度
+	function isChinese(str){    
+	    var reCh=/[u00-uff]/;  
+	    return !reCh.test(str);  
+	}  
+	function setLength(str, id, id_sec){  
+	    var strlen=0;  
+	    var txtval = str;  
+	    for(var i=0;i<txtval.length;i++){  
+	     	if(isChinese(txtval.charAt(i))==true){  
+	      		strlen=strlen+2;  
+	     	}else{  
+	      		strlen=strlen+1;  
+	     	}  
+	    }  
+	    strlen=Math.ceil(strlen/2); 
+	    var result = strlen * 20;
+	    result = result < 160 ? 160 : result;
+	    $(id).style.width = result;
+	    $(id_sec).style.width = result;
+	}  
+	
+</script>
