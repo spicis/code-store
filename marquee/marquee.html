@@ -38,14 +38,10 @@
 	
 	//跑马灯效果
 	function marquee(id, id_sec) {
-		var left = $(id).style.left;
-		left = left.substring(0, left.length - 2);
-		var left_sec = $(id_sec).style.left;
-		left_sec = left_sec.substring(0, left_sec.length - 2);
-		var width = $(id).style.width;
-		width = width.substring(0, width.length - 2);
-		var width_sec = $(id_sec).style.width;
-		width_sec = width.substring(0, width_sec.length - 2);
+		var left = getStyleLeft(id);
+		var left_sec = getStyleLeft(id_sec);
+		var width = getStyleWidth(id);
+		var width_sec = getStyleWidth(id_sec);
 		
 		var temp;
 		var temp_sec;
@@ -66,8 +62,7 @@
 		$(id_sec).style.left=temp_sec;
 	}
 	function run_marquee(id, id_sec) {
-		var width = $(id).style.width;
-		width = width.substring(0, width.length - 2);
+		var width = getStyleWidth(id);
 		if(width > 160) {
 			t = window.setInterval(function() {
 				marquee(id, id_sec);
@@ -81,7 +76,6 @@
 	function stopMarquee() {
 		clearInterval(t);
 	}
-	
 	//计算文字区域长度
 	function isChinese(str){    
 	    var reCh=/[u00-uff]/;  
@@ -104,4 +98,29 @@
 	    $(id_sec).style.width = result;
 	}  
 	
+	//兼容style.width/left等属性获取
+	function getStyleWidth(id){
+		var width = $(id).style.width;
+		var widthStrLength = width.length;
+		var lastTwoLetter;
+		if(width.length > 2) {
+			lastTwoLetter = width.substring(widthStrLength - 2);
+			if(lastTwoLetter == "px") {
+				width = width.substring(0, widthStrLength - 2);
+			}
+		}
+		return width;
+	}
+	function getStyleLeft(id){
+		var left = $(id).style.left;
+		var leftStrLength = left.length;
+		var lastTwoLetter;
+		if(left.length > 2) {
+			lastTwoLetter = left.substring(leftStrLength - 2);
+			if(lastTwoLetter == "px") {
+				left = left.substring(0, leftStrLength - 2);
+			}
+		}
+		return left;
+	}
 </script>
